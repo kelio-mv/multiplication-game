@@ -21,8 +21,14 @@ class Game extends React.Component {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    getRandomFactor() {
+        const hardNumbers = [2, 3, 4, 5, 6, 7, 8, 9];
+        const factors = [...hardNumbers, 0, 1, 10, ...hardNumbers];
+        return factors[this.getRandomInt(0, factors.length - 1)];
+    }
+
     generateNumbers = () => {
-        const newFactors = [this.getRandomInt(0, 10), this.getRandomInt(0, 10)];
+        const newFactors = [this.getRandomFactor(), this.getRandomFactor()];
         const newAnswers = [];
         const correctAnswer = newFactors[0] * newFactors[1];
         const correctAnswerIndex = this.getRandomInt(0, 3);
@@ -32,9 +38,13 @@ class Game extends React.Component {
                 newAnswers.push(correctAnswer);
             } else {
                 while (true) {
-                    const randomAnswer = this.getRandomInt(0, 10) * this.getRandomInt(0, 10);
+                    const randomAnswer = this.getRandomFactor() * this.getRandomFactor();
 
-                    if (randomAnswer !== correctAnswer && !newAnswers.includes(randomAnswer)) {
+                    if (
+                        randomAnswer !== correctAnswer &&
+                        !newAnswers.includes(randomAnswer) &&
+                        Math.abs(randomAnswer - correctAnswer) <= 15
+                    ) {
                         newAnswers.push(randomAnswer);
                         break;
                     }
